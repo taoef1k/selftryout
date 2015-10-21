@@ -5,15 +5,15 @@
        http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
        http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
 
-  <bean id="helloBean" class="org.camel.migration.file.HelloBean">
-      <property name="say" value="Hi from Camel"/>
-  </bean>
+  <bean id="helloBean" class="org.camel.transformation.processor.HelloBean" />
 
   <camelContext xmlns="http://camel.apache.org/schema/blueprint">
   <route>
-    <from uri="file:D:\\upload\\media\\banner\\?noop=true"/>
-    <log message="Migrating file"/>
-    <to uri="file:D:\\upload\\banner\\route"/>
+    <from uri="file:D:\\upload\\camel\\in?noop=true"/>
+    <log message="Processing..."/>
+    <process ref="helloBean"/>
+    <log message="Proceed"/>
+    <to uri="file:D:\\upload\\camel\\out?fileName=reportProcessor.txt"/>
   </route>
 </camelContext>
 

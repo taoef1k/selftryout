@@ -1,5 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.cxrus</groupId>
 	<artifactId>serlftryout</artifactId>
@@ -7,14 +7,23 @@
 	<packaging>pom</packaging>
 	<name>Apache ServiceMix :: Self TryOut</name>
 	<description>Self TryOut ServiceMix</description>
-	<properties>
-		<camel.version>2.16.0</camel.version>
-		<sl4j.version>1.7.12</sl4j.version>
-		<log4j.version>1.2.17</log4j.version>
-	</properties>
 	<modules>
 		<module>camel-migration-file</module>
-	</modules>
+		<module>camel-transformation</module>
+    <module>camel-transformation-tranform</module>
+  </modules>
+	<properties>
+		<camel.version>2.14.1</camel.version>
+		<log4j.version>1.2.17</log4j.version>
+		<sl4j.version>1.7.12</sl4j.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-quartz</artifactId>
+			<version>${camel.version}</version>
+		</dependency>
+	</dependencies>
 	<repositories>
 		<repository>
 			<releases>
