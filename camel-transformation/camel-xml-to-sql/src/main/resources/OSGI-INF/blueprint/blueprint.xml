@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+       http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+       http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
+
+	
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/poc"/>
+        <property name="username" value="root"/>
+        <property name="password" value="root"/>
+    </bean>
+    
+    <bean id="sql" class="org.apache.camel.component.sql.SqlComponent">
+    	<property name="dataSource" ref="dataSource" />
+    </bean>
+    
+	<camelContext xmlns="http://camel.apache.org/schema/blueprint">
+  <propertyPlaceholder location="classpath:sql.properties"/>
+  <route id="camelSQL">
+    <from uri="file:D:\upload\camel\in\xml"/>
+    <log message="filename : ${file:name}"/>
+    <unmarshal>
+      <jaxb contextPath="org.camel.xml.to.sql.model" prettyPrint="true" partClass="org.camel.xml.to.sql.model.CustInfo"/>
+    </unmarshal>
+    <log message="Customer ID : ${body.process}"/>
+    <choice>
+      <when>
+        <simple>${body.process} == 'A'</simple>
+        <to uri="direct:insertProcess"/>
+      </when>
+      <otherwise>
+        <to uri="direct:selectProcess"/>
+      </otherwise>
+    </choice>
+  </route>
+  <route id="insertProcess">
+    <from uri="direct:insertProcess"/>
+    <log message="go into insertProcess"/>
+    <setHeader headerName="loginId">
+      <simple>${body.nationalID}</simple>
+    </setHeader>
+    <setHeader headerName="surname">
+      <simple>${body.firstName}</simple>
+    </setHeader>
+    <setHeader headerName="forename">
+      <simple>${body.lastName}</simple>
+    </setHeader>
+    <setHeader headerName="age">
+      <simple>${body.age}</simple>
+    </setHeader>
+    <to uri="sql:{{sql.insert}}"/>
+    <log message="insertProcess :: ${body}"/>
+  </route>
+  <route id="selectProcess">
+    <from uri="direct:selectProcess"/>
+    <log message="go into selectProcess"/>
+    <setHeader headerName="custId">
+      <simple>${body.nationalID}</simple>
+    </setHeader>
+    <log message="Log Header CustId : ${header.custId}"/>
+    <to uri="sql:{{sql.select}}"/>
+    <log message="query : ${body}"/>
+  </route>
+</camelContext>
+
+</blueprint>

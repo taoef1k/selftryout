@@ -8,9 +8,7 @@
   </parent>
   <artifactId>tryout-web</artifactId>
   <packaging>pom</packaging>
-  <name>Apache ServiceMix
-	: TryOut Web Projec
-ts</name>
+  <name>Apache ServiceMix : TryOut Web Projects</name>
   <modules>
     <module>simple-spring-mvc</module>
     <module>simple-spring-webmvc</module>

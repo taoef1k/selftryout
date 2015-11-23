@@ -14,7 +14,7 @@
     <module>camel-transformation-tranform</module>
     <module>camel-cxf</module>
     <module>camel-jetty</module>
-    <module>tryout-web</module>
+    
   </modules>
   <properties>
     <camel.version>2.14.1</camel.version>

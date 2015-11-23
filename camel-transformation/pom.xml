@@ -11,5 +11,7 @@
   <modules>
     <module>camel-transformation-processor</module>
     <module>camel-transformation-bean</module>
+    <module>camel-xml-to-csv</module>
+    <module>camel-xml-to-sql</module>
   </modules>
 </project>
