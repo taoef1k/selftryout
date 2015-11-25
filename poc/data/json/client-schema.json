@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://localhost:8080/",
+  "type": "object",
+  "properties": {
+    "clientId": {
+      "id": "http://localhost:8080//clientId",
+      "type": "string"
+    },
+    "firstName": {
+      "id": "http://localhost:8080//firstName",
+      "type": "string"
+    },
+    "lastName": {
+      "id": "http://localhost:8080//lastName",
+      "type": "string"
+    },
+    "age": {
+      "id": "http://localhost:8080//age",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "clientId",
+    "firstName",
+    "lastName",
+    "age"
+  ]
+}

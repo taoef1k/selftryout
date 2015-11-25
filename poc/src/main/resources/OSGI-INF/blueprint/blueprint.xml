@@ -18,21 +18,47 @@
 		<property name="servletName" value="CamelServlet" />
 	</bean>
 
-	<camelContext xmlns="http://camel.apache.org/schema/blueprint">
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/poc" />
+		<property name="username" value="root" />
+		<property name="password" value="root" />
+	</bean>
+
+	<bean id="sql" class="org.apache.camel.component.sql.SqlComponent">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="clientBean" class="com.cxrus.fuse.poc.ClientBean" />
+	<bean id="usersBean" class="com.cxrus.fuse.poc.UsersBean" />
+
+	<camelContext id="context-61b13d3c-ac6a-4da9-8742-baf60d80382e" xmlns="http://camel.apache.org/schema/blueprint">
+  <propertyPlaceholder location="classpath:sql.properties"/>
   <restConfiguration component="servlet" host="localhost" port="9999" contextPath="/fuse-poc" bindingMode="json">
     <dataFormatProperty key="prettyPrint" value="true"/>
   </restConfiguration>
   <rest path="/sql">
     <get uri="/select/{clientId}">
-      <to uri="direct:selectQuery"/>
+      <to uri="direct:selectProcess"/>
     </get>
+    <post uri="/insert/users" consumes="application/json" produces="application/json">
+      <to uri="direct:insertProcess"/>
+    </post>
   </rest>
   <route>
-    <from uri="direct:selectQuery"/>
-    <setBody>
-      <simple>Body of Select Query</simple>
-    </setBody>
-    <log message="Body is ${body}"/>
+    <from uri="direct:selectProcess"/>
+    <log message="headers : ${headers.clientId}"/>
+    <to uri="sql:{{sql.select}}"/>
+    <log message="Log Query : ${body}"/>
+    <to uri="bean:clientBean?method=process" id="to1"/>
+    <log message="Client Bean : ${body}" id="log1"/>
+  </route>
+  <route>
+    <from uri="direct:insertProcess"/>
+    <log message="Log Headers : ${body}"/>
+    <to uri="bean:usersBean?method=process"/>
+    <log message="QUERY &gt;&gt;&gt;&gt;&gt; {{sql.insert}}"/>
   </route>
 </camelContext>
 
