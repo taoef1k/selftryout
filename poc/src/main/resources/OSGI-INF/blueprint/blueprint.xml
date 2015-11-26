@@ -32,6 +32,7 @@
 
 	<bean id="clientBean" class="com.cxrus.fuse.poc.ClientBean" />
 	<bean id="usersBean" class="com.cxrus.fuse.poc.UsersBean" />
+	<bean id="responseBean" class="com.cxrus.fuse.poc.ResponseBean" />
 
 	<camelContext id="context-61b13d3c-ac6a-4da9-8742-baf60d80382e" xmlns="http://camel.apache.org/schema/blueprint">
   <propertyPlaceholder location="classpath:sql.properties"/>
@@ -59,6 +60,8 @@
     <log message="Log Headers : ${body}"/>
     <to uri="bean:usersBean?method=process"/>
     <log message="QUERY &gt;&gt;&gt;&gt;&gt; {{sql.insert}}"/>
+    <to uri="sql:{{sql.insert}}"/>
+    <to uri="bean:responseBean?method=init"/>
   </route>
 </camelContext>
 

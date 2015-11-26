@@ -9,9 +9,7 @@
 
   <camelContext xmlns="http://camel.apache.org/schema/blueprint">
   <route id="timerToLog">
-    <from uri="quartz://camelTransform/myTimer?cron=0+32+16+*+*+?"/>
-    <log message="Quartz Trigger to Running Process...."/>
-    <pollEnrich uri="file:D:\\upload\\camel\\in?fileName=test.txt&amp;noop=true"/>
+    <from uri="file:D:\upload\camel\in?fileName=test.txt"/>
     <log message="Processing..."/>
     <bean ref="helloBean"/>
     <log message="Proceed"/>
